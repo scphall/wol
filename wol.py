@@ -238,7 +238,7 @@ def move(details, mv):
     os.system(cmd)
     if not os.path.exists('%s/%s' % (wolvars.woldir, new)):
         os.mkdir('%s/%s' % (wolvars.woldir, new))
-    cmd = 'ln -s %s/%s.pdf %s/%s/"%s".pdf' % (wolvars.woldir,
+    cmd = 'ln -s %s/%s.pdf %s/%s/"%s".pdf' % (wolvars.arxiv_dir,
                                               details[arxiv]['arxiv'],
                                               wolvars.woldir, new, title)
     os.system(cmd)
