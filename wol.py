@@ -168,6 +168,7 @@ def get_arxiv(name):
     parser.title = parser.title.replace('  ', ' ')
     parser.title = parser.title.replace('/', '')
     parser.title = parser.title.replace('--gt;', '\\to')
+    parser.title = parser.title.replace('-gt;', '\\to')
     details.update({name : {'title' : parser.title,
                             'arxiv' : parser.filename}})
     return details
