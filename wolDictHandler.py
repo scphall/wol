@@ -1,40 +1,21 @@
-import os
-from HTMLParser import HTMLParser
-
-class WolVars:
-    """Keeps all variables and pathnames and urls etc."""
-    arxiv_abs = 'http://arxiv.org/abs/%s'
-    arxiv_pdf = 'http://arxiv.org/pdf/%s.pdf'
-    lhcb_ana = 'https://cds.cern.ch/record/1384141/files/%s'
-    woldir = ''
-    arxiv_dir = ''
-    woldot = ''
-    def __init__(self):
-        self.woldir = os.getenv('WOLDIR')
-        if not self.woldir:
-            self.woldir = os.getcwd()
-        self.arxiv_dir = '%s/arxiv' % self.woldir
-        self.woldot = '%s/.wol' % self.woldir
-    #
-    def get_arxiv_abs(self, number):
-        return self.arxiv_abs % number
-    #
-    def get_arxiv_pdf(self, number):
-        return self.arxiv_pdf % number
-    #
-    def get_lhcb_ana(self, name):
-        return self.lhcb_ana % name
-
+################################################################################
+from wolVars import *
+################################################################################
 
 class WolDictHandler:
     details = {}
     recents = []
-    template = ''
+    template_info = ''
+    template_add = ''
     def __init__(self):
-        self.template = ' arXiv:      %(version)s\n'
-        self.template += ' Directory:  %(dir)s\n'
-        self.template += ' %(title_print)s\n'
-        self.template += (80 * '-')
+        self.template_add = ' arXiv:      %(version)s\n'
+        self.template_add += ' Directory:  %(dir)s\n'
+        self.template_add += ' %(title_print)s\n'
+        self.template_add += (80 * '-')
+        self.template_info = ' %s' % WolVars().woldir
+        self.template_info += '/%(dir)s/%(version)s.pdf\n'
+        self.template_info += ' %(title_print)s\n'
+        self.template_info += (80 * '-')
         return
     #
     def setup(self, details, recents=[]):
@@ -56,6 +37,14 @@ class WolDictHandler:
                 raise
         return
     #
+    def add_recent(self, arxiv):
+        if self.recents.count(arxiv):
+            self.recents.pop(self.recents.index(arxiv))
+        if len(self.recents) > 9:
+            self.recents = self.recents[:9]
+        self.recents.append(arxiv)
+        return
+    #
     def add(self, arxiv, vers, directory, title):
         title = title.replace('\n', '')
         title = title.replace('$', '')
@@ -75,6 +64,7 @@ class WolDictHandler:
                                'dir' : directory,
                                'title' : title,
                                'title_print' : title_print}
+        self.add_recent(arxiv)
         return
     #
     def has(self, key):
@@ -107,33 +97,19 @@ class WolDictHandler:
                      new_details['title'])
         return True
     #
-    def printer(self, arxiv):
-        info = self.template % self.get(arxiv)
+    def printer(self, arxiv, new=False):
+        if new:
+            info = self.template_add % self.get(arxiv)
+        else:
+            info = self.template_info % self.get(arxiv)
+        print info
         return
+    #
+    def printer_recents(self):
+        print 80 * '-'
+        for n, arxiv in enumerate(self.recents):
+            print '%d )' % (len(self.recents) - n),
+            self.printer(arxiv)
+    #
 
-
-class LitHTMLParser(HTMLParser):
-    """Parses HTML and keeps title and filename."""
-    title = ''
-    filename = ''
-    get_title = False
-    get_filename = False
-    def handle_starttag(self, tag, attrs):
-        if tag == 'title':
-            self.get_title = True
-        if tag == 'a':
-            self.get_filename = True
-        #print 'Start', tag
-    def handle_endtag(self, tag):
-        if tag == 'title':
-            self.get_title = False
-        if tag == 'a':
-            self.get_filename = False
-        #print 'End', tag
-    def handle_data(self, data):
-        if self.get_title:
-            self.title += data
-        elif self.get_filename:
-            if data.startswith('arXiv:'):
-                self.filename = data.replace('arXiv:', '')
-        #print 'Data', data
+################################################################################
