@@ -55,9 +55,19 @@ Usage
         $ wol find options with an and
         $ wol findor options with an or
 
-8) Show, will open (in background) all files matching find arguments (with
+8)  Show, will open (in background) all files matching find arguments (with
    and).  Will not open if there are more than 5 papers which match.
 
+9) Clean, removes dead stuff and empty dirs
+
+        $ wol clean
+
+10) Remove, remove a symbolic link and puts the arxiv paper in the .delete
+   directory, this is removed with clean
+
+        $ wol rm *????.????*
+
+Installation
 ------------
 0) Get the package from github:
 
