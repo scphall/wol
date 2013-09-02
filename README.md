@@ -58,9 +58,6 @@ Usage
 8) Show, will open (in background) all files matching find arguments (with
    and).  Will not open if there are more than 5 papers which match.
 
-        $ wol show options with and
-
-Installation
 ------------
 0) Get the package from github:
 
@@ -75,10 +72,16 @@ Installation
 
 3) GO!
 
+Other
+-----
+I had problems with autocompletion, to resolve this try
+`complete -p wol` (assuming wol is your alias). you should get:
+        
+        $ complete -p wol
+        complete -F _wol wol
 
----
-#If using (now removed) wol.sh, can specify auto completion with:
-complete -o nospace -f default -X ".*" -F _wol wol
-Left in for my own refernence.
+Then do:
 
----
+        $ complete -o nospace -f default -X '.*' -F _wol wol
+
+All; should work.  Does not autocomplete option, this is on my todo list.

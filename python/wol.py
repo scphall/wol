@@ -32,6 +32,8 @@ def help_msg():
     msg += '\n    show       Show paper(s) matching ALL arguments'
     msg += '\n    update     Ensure wol is up to date'
     msg += '\n    recent     Print most recent'
+    msg += '\n    rem        Remove arxivs'
+    msg += '\n    clean      Clean up'
     msg += '\n    config     Change options'
     msg += '\n    info       Display info'
     msg += '\n    help       Display this message'
@@ -67,8 +69,12 @@ def opts(args):
         wolOps.recent()
     elif operation == 'update':
         wolOps.update(args)
+    elif operation == 'rem':
+        wolOps.rm(args)
     elif operation == 'config':
         wolOps.config(args)
+    elif operation == 'clean':
+        wolOps.clean()
     elif operation == 'info':
         wolOps.info(__author__, __version__)
     else:

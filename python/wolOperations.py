@@ -1,5 +1,9 @@
 ################################################################################
-import pickle
+"""
+Contains all operations that are arguments of wol
+
+"""
+################################################################################
 import sys
 import os
 from wolVars import *
@@ -96,7 +100,7 @@ def mv(args):
     print 80 * '-'
     wolvars = WolVars()
     directory = args.pop(-1)
-    args = [x.lower() for x in args]
+    Args = [x.lower() for x in args]
     handler = get_dot_wol()
     check_directory(wolvars.arxiv_dir)
     for arxiv, details in handler.details.iteritems():
@@ -192,12 +196,45 @@ def config(args):
 def info(author, version):
     handler = get_dot_wol()
     msg = 'Wol info:'
-    msg += '\n    Author  : %s' % author
-    msg += '\n    Version : %s' % version
-    msg += '\n    WOLDIR  : %s' % WolVars().woldir
     msg += '\n    Entries : %d' % len(os.listdir(WolVars().arxiv_dir))
     msg += '\n  Configurables:' 
     msg += '\n    viewer  : %(viewer)s' % handler.config
     print msg
     return
+################################################################################
+
+def rm(args):
+    """Move files to another directory."""
+    wolvars = WolVars()
+    handler = get_dot_wol()
+    check_directory(wolvars.delete_dir)
+    args = [x.lower() for x in args]
+    cmd_rm = []
+    cmd_mv = []
+    temp_rm = '%s/"%s".pdf'
+    temp_mv = '%s/%s.pdf %s/%s.pdf' % (wolvars.arxiv_dir, '%s',
+                                       wolvars.delete_dir, '%s')
+    for arxiv, details in handler.details.iteritems():
+        if arxiv not in args:
+            cmd_rm.append(temp_rm % (details['dir'], details['title']))
+    for arxiv in args:
+        handler.details.pop(arxiv)
+    cmds = ['mv %s' % x for x in cmd_mv]
+    cmd_rm = ' '.join(cmd_rm)
+    cmds.append('rm -f %s' % cmd_rm)
+    put_dot_wol(handler)
+    for cmd in cmds:
+        os.system(cmd)
+    return
+################################################################################
+
+def clean():
+    wolvars = WolVars()
+    dirs = os.listdir(wolvars.woldir)
+    for dirpath, dirnames, filenames in os.walk(wolvars.woldir):
+        if len(dirnames) == 0 and len(filenames) == 0:
+            os.system('rmdir %s' % dirpath)
+    os.system('rm -rd %s' % wolvars.delete_dir)
+    return
+
 ################################################################################

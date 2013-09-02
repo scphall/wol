@@ -9,12 +9,14 @@ class WolVars:
     lhcb_ana = 'https://cds.cern.ch/record/1384141/files/%s'
     woldir = ''
     arxiv_dir = ''
+    delete_dir = ''
     woldot = ''
     def __init__(self):
         self.woldir = os.getenv('WOLDIR')
         if not self.woldir:
             self.woldir = os.getcwd()
         self.arxiv_dir = '%s/arxiv' % self.woldir
+        self.delete_dir = '%s/.deleted' % self.woldir
         self.woldot = '%s/.wol' % self.woldir
     #
     def get_arxiv_abs(self, number):

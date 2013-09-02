@@ -3,6 +3,9 @@ from wolVars import *
 ################################################################################
 
 class WolDictHandler:
+    """Class that is held in pickled file.
+    Holds all information, including configurations.
+    """
     details = {}
     recents = []
     config = {}
