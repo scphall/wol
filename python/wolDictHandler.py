@@ -5,6 +5,7 @@ from wolVars import *
 class WolDictHandler:
     details = {}
     recents = []
+    config = {}
     template_info = ''
     template_add = ''
     def __init__(self):
@@ -16,11 +17,13 @@ class WolDictHandler:
         self.template_info += '/%(dir)s/%(version)s.pdf\n'
         self.template_info += ' %(title_print)s\n'
         self.template_info += (80 * '-')
+        self.config = {'viewer' : 'evince'}
         return
     #
-    def setup(self, details, recents=[]):
+    def setup(self, details, recents, config):
         self.details = details
         self.recents = recents
+        self.config.update(config)
     #
     def get(self, arxiv, key=None):
         if key is None:
