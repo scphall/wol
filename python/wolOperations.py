@@ -42,11 +42,11 @@ def add(args):
     move_dir = args.pop(-1)
     arxivs = [str2arxiv(x) for x in args]
     test_dir = arxiv_format(move_dir)
-    if not is_arxiv(test_dir):
+    if not is_arxiv(test_dir) and not is_arxiv_old(test_dir):
         directory = test_dir
     else:
         directory = 'papers'
-        arxivs.append(test_dir)
+        arxivs.append(str2arxiv(test_dir))
     handler = get_dot_wol()
     check_directory(wolvars.arxiv_dir)
     for arxiv in arxivs:
@@ -150,7 +150,7 @@ def update(args):
         if not arxiv_file(arxiv, files):
             get_arxiv_from_web(details)
             handler.printer(arxiv, True)
-        check_directory(handler.get(arxiv, 'dir'))
+        check_directory('%s/%s' % (wolvars.woldir, handler.get(arxiv, 'dir')))
         create_ln(details)
     return
 
@@ -161,10 +161,6 @@ def recent():
     handler.printer_recents()
 ################################################################################
 
-    for arxiv in pass_list:
-        handler.printer(arxiv)
-    return
-################################################################################
 def show(args):
     """Open any matched arguments."""
     arxiv_dir = WolVars().arxiv_dir
@@ -234,7 +230,8 @@ def clean():
     for dirpath, dirnames, filenames in os.walk(wolvars.woldir):
         if len(dirnames) == 0 and len(filenames) == 0:
             os.system('rmdir %s' % dirpath)
-    os.system('rm -rd %s' % wolvars.delete_dir)
+    if os.path.exists(wolvars.delete_dir):
+        os.system('rm -rd %s' % wolvars.delete_dir)
     return
 
 ################################################################################

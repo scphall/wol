@@ -14,13 +14,16 @@ from wolDictHandler import *
 ################################################################################
 
 def arxiv_format(string):
-    arxiv = string.replace('.pdf', '')
-    arxiv = arxiv.split('/')[-1]
+    string = string.replace('.pdf', '')
+    string = string.split('/')
+    arxiv = string[-1]
     if arxiv.count('v'):
         arxiv = arxiv[:arxiv.find('v')]
     if arxiv.count(']'):
         arxiv = arxiv.replace('[', '')
         arxiv = arxiv[:arxiv.find(']')]
+    if len(arxiv) == 7 and len(string) > 1:
+        arxiv = '/'.join([string[-2], arxiv])
     return arxiv
 ################################################################################
 
@@ -36,9 +39,25 @@ def is_arxiv(arxiv):
     return accept
 ################################################################################
 
+def is_arxiv_old(arxiv):
+    check = arxiv.split('/')
+    accept = True
+    if len(check) == 2:
+        if check[0].isdigit() or not check[1].isdigit():
+            accept = False
+        elif len(check[1]) != 7:
+            accept = False
+    elif len(check) == 1:
+        if not len(check[0]) > 7:
+            accept = False
+        elif not check[0][-7:].isdigit():
+            accept = False
+    return accept
+################################################################################
+
 def str2arxiv(string):
     arxiv = arxiv_format(string)
-    if not is_arxiv(arxiv):
+    if not is_arxiv(arxiv) and not is_arxiv_old(arxiv):
         print '%s (from %s) is not a valid arxiv number' % (arxiv, string)
         sys.exit(0)
     return arxiv
@@ -85,16 +104,18 @@ def arxiv_file(arxiv, files):
 def get_arxiv_from_web(details):
     cmd = 'wget -q --user-agent=Lynx %s -O %s/%s.pdf'
     wolvars = WolVars()
-    cmd = cmd % (wolvars.get_arxiv_pdf(details['version']), wolvars.arxiv_dir,
-            details['version'])
+    cmd = cmd % (wolvars.get_arxiv_pdf(details['version_get']),
+                 wolvars.arxiv_dir,
+                 details['version'])
     os.system(cmd)
     return
 ################################################################################
 
 def check_directory(directory):
+    directory = directory.rstrip('/.')
     if not os.path.exists(directory):
         os.mkdir(directory)
-        return
+    return
 ################################################################################
 
 def get_arxiv_details(arxiv):
@@ -111,8 +132,8 @@ def create_ln(details):
     wolvars = WolVars()
     files = os.listdir('%s/%s' % (wolvars.woldir, details['dir']))
     files = [str2arxiv(x) for x in files]
-    arxiv = str2arxiv(details['version'])
-    if not files.count(arxiv):
+    #arxiv = str2arxiv(details['version'])
+    if not files.count(str2arxiv(details['version'])):
         cmd = 'ln -s %s/%s.pdf %s/%s/"%s".pdf'
         cmd = cmd % (wolvars.arxiv_dir, details['version'],
                      wolvars.woldir, details['dir'], details['title'])

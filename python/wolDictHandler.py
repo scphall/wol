@@ -60,13 +60,16 @@ class WolDictHandler:
         title = title.replace('-gt;', '\\to')
         split = title.split(' ')[1:]
         title_print = split.pop(0)
+        #vers.replace('/', '')
         n = 1
         for word in split:
             if (len(title_print) + len(word)) > 75 * n:
                 title_print += '\n  '
                 n += 1
             title_print += ' %s' % word
-        self.details[arxiv] = {'version' : vers,
+        directory = directory.rstrip('/.')
+        self.details[arxiv] = {'version' : vers.replace('/', ''),
+                               'version_get' : vers,
                                'dir' : directory,
                                'title' : title,
                                'title_print' : title_print}
@@ -77,6 +80,10 @@ class WolDictHandler:
         return self.details.has_key(key)
     #
     def put(self, key, var, value):
+        if var == 'dir':
+            value = value.rstrip('/.')
+        #elif var == 'version':
+        #    value = value.replace('/', '')
         self.get(key)[var] = value
         return
     #

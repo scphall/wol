@@ -90,8 +90,13 @@ I had problems with autocompletion, to resolve this try
         $ complete -p wol
         complete -F _wol wol
 
-Then do:
+Then do, in .bashrc:
 
         $ complete -o nospace -f default -X '.*' -F _wol wol
 
-All; should work.  Does not autocomplete option, this is on my todo list.
+Does not autocomplete options, this is on my todo list.
+For old arxiv files, you must add with:
+
+        $ wol add hep-ph/0123456
+
+
