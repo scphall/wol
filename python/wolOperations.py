@@ -100,13 +100,13 @@ def mv(args):
     print 80 * '-'
     wolvars = WolVars()
     directory = args.pop(-1)
-    Args = [x.lower() for x in args]
+    args = [x.lower() for x in args]
     handler = get_dot_wol()
     check_directory(wolvars.arxiv_dir)
     for arxiv, details in handler.details.iteritems():
         for arg in args:
-            if (details['title'].lower().count(arg) or 
-                details['dir'].lower().count(arg) or 
+            if (details['title'].lower().count(arg) or
+                details['dir'].lower().count(arg) or
                 details['version'].lower().count(arg)):
                 #if not handler.has(arxiv):
                 #    version, title = get_arxiv_details(arxiv)
@@ -120,7 +120,8 @@ def mv(args):
                                  handler.get(arxiv, 'title'))
                     handler.put(arxiv, 'dir', directory)
                     os.system(cmd)
-                check_directory(handler.get(arxiv, 'dir'))
+                check_directory('%s/%s' % (wolvars.woldir,
+                                           handler.get(arxiv, 'dir')))
                 create_ln(handler.get(arxiv))
                 handler.printer(arxiv, True)
     put_dot_wol(handler)
@@ -193,7 +194,7 @@ def info(author, version):
     handler = get_dot_wol()
     msg = 'Wol info:'
     msg += '\n    Entries : %d' % len(os.listdir(WolVars().arxiv_dir))
-    msg += '\n  Configurables:' 
+    msg += '\n  Configurables:'
     msg += '\n    viewer  : %(viewer)s' % handler.config
     print msg
     return

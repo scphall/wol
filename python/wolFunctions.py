@@ -155,8 +155,8 @@ def find(args, handler, and_or='and'):
         else:
             passes = False
         for arg in args:
-            if not (details['title'].lower().count(arg) or 
-                    details['dir'].lower().count(arg) or 
+            if not (details['title'].lower().count(arg) or
+                    details['dir'].lower().count(arg) or
                     details['version'].lower().count(arg)):
                 if and_or == 'and':
                     passes &= False
