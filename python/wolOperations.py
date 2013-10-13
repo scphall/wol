@@ -56,7 +56,7 @@ def add(args):
             handler.add(arxiv, version, directory, title)
         if not arxiv_file(arxiv, files):
             get_arxiv_from_web(handler.get(arxiv))
-        check_directory(handler.get(arxiv, 'dir'))
+        check_directory(os.path.join(wolvars.woldir, handler.get(arxiv, 'dir')))
         create_ln(handler.get(arxiv))
         #print 'Paper "%(title)s" in %(dir)s' % handler.get(arxiv)
         handler.printer(arxiv, True)
