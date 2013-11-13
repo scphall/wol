@@ -16,9 +16,11 @@ class WolDictHandler:
         self.template_add += ' Directory:  %(dir)s\n'
         self.template_add += ' %(title_print)s\n'
         self.template_add += (80 * '-')
-        self.template_info = ' %s' % WolVars().woldir
-        self.template_info += '/%(dir)s/%(version)s.pdf\n'
-        self.template_info += ' %(title_print)s\n'
+        #self.template_info = ' %s' % WolVars().woldir
+        #self.template_info += '/%(dir)s/%(version)s.pdf\n'
+        self.template_info = ' %(title_print)s\n'
+        self.template_info += ' %s' % WolVars().arxiv_dir
+        self.template_info += '/%(version)s.pdf\n'
         self.template_info += (80 * '-')
         self.config = {'viewer' : 'evince'}
         return
