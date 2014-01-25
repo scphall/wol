@@ -14,27 +14,30 @@ Downloads directory.
 
 Usage
 -----
+Apologies, this is out of date, done a load of changes, but the basics hold
+
+
 1) Basic, you can guess these:
 
         $ wol help
         $ wol info
 
-   number in, the format is ????.????).  Can add multiple files at a time.
+2) Add or move with add
 
         $ wol add *????.????*
 
    Can specify directory in which to add to:
- 
+
         $ wol add *????.????* directory
-        
+
    Can also add another .wol file (extension must be .wol) from someone else.
 
         $ wol add my_pals.wol
-        
+
 3) Move, mv all files from current location to new directory
 
         $ wol mv *????.????* new_directory
-        
+
 4) Update, just checks all is well
 
         $ wol update
@@ -51,7 +54,7 @@ Usage
    details on all files which match all arguments.  The findor command will
    do an or:
 
-        $ wol find        
+        $ wol find
         $ wol find options with an and
         $ wol findor options with an or
 
@@ -86,7 +89,7 @@ Other
 -----
 I had problems with autocompletion, to resolve this try
 `complete -p wol` (assuming wol is your alias). you should get:
-        
+
         $ complete -p wol
         complete -F _wol wol
 

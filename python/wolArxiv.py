@@ -54,6 +54,17 @@ class ArXiv(object):
         self._arxiv = match.groups()[0]
         return True
 
+    def set_title(self, title):
+        title = title.replace('\n', '')
+        title = title.replace('$', '')
+        title = title.replace('  ', ' ')
+        title = title.replace('/', '')
+        title = title.replace('--gt;', '\\to')
+        title = title.replace('-gt;', '\\to')
+        self._title = title
+        return
+
+
     def get_arxiv_details(self):
         url = self._vars.get_arxiv_abs(self.arxiv)
         data = urllib.urlopen(url).read()
@@ -61,13 +72,13 @@ class ArXiv(object):
         parser.feed(data)
         urlname = self._vars.get_arxiv_pdf(self.arxiv)
         self._version = parser.filename
-        self._title = parser.title
+        self.set_title(parser.title)
         return
 
     def set_by_copy(self, name):
         filename = os.path.split(name)[-1]
         check_dir(self._vars.arxiv_dir)
-        shutil.copy(name, os.path.join(self.vars.arxiv_dir, filename))
+        shutil.copy(name, os.path.join(self._vars.arxiv_dir, filename))
         return
 
     def set_by_download(self, name):

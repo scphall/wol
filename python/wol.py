@@ -67,7 +67,8 @@ def add(arxivs, *args):
         arxivs.add(arg)
         if dir is not None:
             arxivs.move(arg, dir)
-        print '{0}\n{1}\n{0}'.format('-' * 80, arxivs.get(arg))
+        print '{0}\n{1}'.format('-' * 80, arxivs.get(arg))
+    print 80 * '-'
     return arxivs
 
 
