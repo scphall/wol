@@ -13,7 +13,7 @@ class ArXivs(object):
 
     @property
     def viewer(self):
-        return _config['viewer']
+        return self._config['viewer']
 
     def __str__(self):
         out = ('-' * 80) + '\n'
@@ -22,8 +22,15 @@ class ArXivs(object):
             out += ('-' * 80) + '\n'
         return out
 
+    def __len__(self):
+        return len(self._arxivs)
+
     def exists(self, number):
-        return number in self._arxivs
+        pattern = re.compile('(\d{4}\.\d{4}|\d{7})')
+        match = pattern.search(number)
+        if match is None:
+            return False
+        return self._arxivs.has_key(match.groups()[0])
 
     def get(self, number):
         pattern = re.compile('(\d{4}\.\d{4}|\d{7})')
@@ -35,13 +42,21 @@ class ArXivs(object):
         return False
 
     def add(self, new):
-        if not self.exists(new):
-            arxiv = ArXiv()
-            arxiv.set(new)
-            if arxiv.valid:
-                self._arxivs.update({arxiv.arxiv : arxiv})
-            else:
-                print 'Adding {} failed'.format(arxiv.arxiv)
+        if type(new) == ArXivs:
+            print 80 * '-'
+            for key, item in new._arxivs.iteritems():
+                if not self.exists(key):
+                    item.check()
+                    self._arxivs.update({key : item})
+                    print item, '\n', 80 * '-'
+        else:
+            if not self.exists(new):
+                arxiv = ArXiv()
+                arxiv.set(new)
+                if arxiv.valid:
+                    self._arxivs.update({arxiv.arxiv : arxiv})
+                else:
+                    print 'Adding {} failed'.format(arxiv.arxiv)
         return
 
     def move(self, arxiv, dir):
@@ -50,13 +65,18 @@ class ArXivs(object):
 
     def set_arxivs(self, arxivs):
         self._arxivs = arxivs
+        return
+
+    def set_config(self, conf):
+        self._config = conf
+        return
 
     def find(self, search):
         out = ('-' * 80) + '\n'
         files = []
         for key, item in self._arxivs.iteritems():
             if item.find(search):
-                out += item.__str__()
+                out += item.__str__() + '\n'
                 out += ('-' * 80) + '\n'
                 files.append(item.file_title)
         print out
@@ -70,14 +90,34 @@ class ArXivs(object):
         return
 
     def show_config(self):
-        out = 'Wol config:\n'
+        out = 'Wol config:'
         for key, item in self._config.iteritems():
-            out += ' {:10s} {}\n'.format(key, item)
+            out += '\n {:10s} {}'.format(key, item)
         print out
         return
 
+    def move(self, search, newdir):
+        out = ('-' * 80) + '\n'
+        for key, item in self._arxivs.iteritems():
+            if item.find(search):
+                item.move(newdir)
+                out += item.__str__() + '\n'
+                out += ('-' * 80) + '\n'
+        print out
 
+    def check(self):
+        for key, item in self._arxivs.iteritems():
+            item.check()
+        return
 
+    def delete(self, todel):
+        if not self.exists(todel):
+            return
+        pattern = re.compile('(\d{4}\.\d{4}|\d{7})')
+        match = pattern.search(todel)
+        self._arxivs.pop(match.groups()[0]).delete()
+        print 'Deleted {}'.format(todel)
+        return
 
 
 

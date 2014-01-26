@@ -42,7 +42,9 @@ class ArXiv(object):
         return out
 
     def find(self, search):
-        if self._arxiv.count(search) or self._title.count(search):
+        if self._arxiv.count(search) or \
+           self._title.count(search) or \
+           self._directory.count(search):
             return True
         return False
 
@@ -55,15 +57,14 @@ class ArXiv(object):
         return True
 
     def set_title(self, title):
-        title = title.replace('\n', '')
-        title = title.replace('$', '')
-        title = title.replace('  ', ' ')
-        title = title.replace('/', '')
-        title = title.replace('--gt;', '\\to')
-        title = title.replace('-gt;', '\\to')
+        pattern = re.compile('\$|\s{2,}|/')
+        title = pattern.sub('', title)
+        pattern = re.compile('\t|\n')
+        title = pattern.sub(' ', title)
+        pattern = re.compile('-+gt;')
+        title = pattern.sub('to', title)
         self._title = title
         return
-
 
     def get_arxiv_details(self):
         url = self._vars.get_arxiv_abs(self.arxiv)
@@ -78,7 +79,8 @@ class ArXiv(object):
     def set_by_copy(self, name):
         filename = os.path.split(name)[-1]
         check_dir(self._vars.arxiv_dir)
-        shutil.copy(name, os.path.join(self._vars.arxiv_dir, filename))
+        if not os.path.exists(os.path.join(self._vars.arxiv_dir, filename)):
+            shutil.copy(name, os.path.join(self._vars.arxiv_dir, filename))
         return
 
     def set_by_download(self, name):
@@ -115,6 +117,23 @@ class ArXiv(object):
         new = self.file_title
         check_dir(os.path.split(new)[0])
         shutil.move(old, new)
+        return
+
+    def check(self):
+        if not os.path.exists(self.file_arxiv):
+            self.set_by_download(self._arxiv)
+        if not os.path.exists(self.file_title):
+            self.create_link()
+
+    def delete(self):
+        if os.path.exists(self.file_title):
+            os.remove(self.file_title)
+        if os.path.exists(self.file_arxiv):
+            check_dir(self._vars.del_dir)
+            shutil.move(
+                self.file_arxiv,
+                os.path.join(self._vars.del_dir, '{}.pdf'.format(self._version))
+            )
         return
 
 

@@ -42,24 +42,31 @@ def get_arxiv(number):
 def set_dotwol(arxivs):
     with open(WolVars().dotwol, 'wb') as f:
         pickle.dump(arxivs._arxivs, f)
+        pickle.dump(arxivs._config, f)
     return
 
 
-def read_dotwol():
+def read_dotwol(filename=None):
     arxivs = ArXivs()
+    if filename is None:
+        filename = WolVars().dotwol
     if not os.path.exists(WolVars().dotwol):
         print 'Making new .wol file'
-        with open(WolVars().dotwol, 'wb') as f:
+        with open(filename, 'wb') as f:
+            pickle.dump({}, f)
             pickle.dump({}, f)
     else:
-        with open(WolVars().dotwol, 'rb') as f:
+        with open(filename, 'rb') as f:
             arxivs.set_arxivs(pickle.load(f))
+            arxivs.set_config(pickle.load(f))
     return arxivs
 
 
 def add(arxivs, *args):
     """Add arXiv papers to wol, or move into given directory"""
     dir = None
+    if len(args) == 0:
+        return arxivs
     if not get_arxiv(args[-1]) and len(args) > 1:
         dir = args[-1]
         args = args[:-1]
@@ -72,9 +79,27 @@ def add(arxivs, *args):
     return arxivs
 
 
+def addwol(arxivs, *args):
+    """Add existing .wol file to current .wol"""
+    for arg in args:
+        new_arxivs = read_dotwol(arg)
+        arxivs.add(new_arxivs)
+    return arxivs
+
+
 def find(arxivs, *args):
     """Find an arXiv paper in wol"""
-    arxivs.find(args[0])
+    if len(args) > 0:
+        arxivs.find(args[0])
+    else:
+        arxivs.find('.')
+    return arxivs
+
+
+def move(arxivs, *args):
+    """Move arXiv papers in wol"""
+    if len(args) > 1:
+        arxivs.move(args[0], args[1])
     return arxivs
 
 
@@ -99,20 +124,43 @@ def config(arxivs, *args):
     return arxivs
 
 
+def update(arxivs, *args):
+    """Make sure everythin in .wol is in WOLDIR"""
+    arxivs.check()
+    return arxivs
+
+def delete(arxivs, *args):
+    """Remove entry by arxiv reference"""
+    for arg in args:
+        arxivs.delete(arg)
+    return arxivs
+
+
 def help(operations):
-    print 'Wol help options:'
+    print 'Wol help, possible operations are:'
     for key, item in sorted(operations.iteritems()):
         print ' {:10s} {}'.format(key, item.__doc__)
     return
+
+def info(arxivs, *args):
+    """Print info"""
+    print 'Wol info:'
+    print ' {:30s} {}'.format('Number of entries', len(arxivs))
+    return arxivs
 
 
 def opts(operation, *args):
     """Options parse and then run."""
     operations = {
         'add' : add,
+        'addwol' : addwol,
+        'move' : move,
         'find' : find,
         'show' : show,
         'config' : config,
+        'update' : update,
+        'del' : delete,
+        'info' : info,
     }
     if operation in ['help', '-h']:
         help(operations)
