@@ -175,7 +175,7 @@ def opts(operation, *args):
         'update' : update,
         'del' : delete,
         'info' : info,
-        'br' : browse,
+        'browse' : browse,
     }
     if operation in ['help', '-h']:
         help(operations)
