@@ -89,17 +89,19 @@ def addwol(arxivs, *args):
 
 def find(arxivs, *args):
     """Find an arXiv paper in wol"""
-    if len(args) > 0:
-        arxivs.find(args[0])
-    else:
+    if len(args) == 0:
         arxivs.find('.')
+    for arg in args:
+        arxivs.find(arg)
     return arxivs
 
 
 def move(arxivs, *args):
     """Move arXiv papers in wol"""
     if len(args) > 1:
-        arxivs.move(args[0], args[1])
+        dir = args[len(args) - 1]
+        for arg in args[:-1]:
+            arxivs.move(arg, dir)
     return arxivs
 
 
@@ -148,6 +150,18 @@ def info(arxivs, *args):
     print ' {:30s} {}'.format('Number of entries', len(arxivs))
     return arxivs
 
+def browse(arxivs, *args):
+    """Show arXiv papers in browser"""
+    files = arxivs.find_arxivs(args[0])
+    cmd = '{} '.format(arxivs.browser)
+    if len(files) > 6:
+        files = files[:6]
+    for file in files:
+        cmd += '"{}" '.format(file.web_address)
+    if len(files) > 0:
+        os.system(cmd)
+    return arxivs
+
 
 def opts(operation, *args):
     """Options parse and then run."""
@@ -161,6 +175,7 @@ def opts(operation, *args):
         'update' : update,
         'del' : delete,
         'info' : info,
+        'br' : browse,
     }
     if operation in ['help', '-h']:
         help(operations)

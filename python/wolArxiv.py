@@ -36,16 +36,29 @@ class ArXiv(object):
     def file_title(self):
         return os.path.join(self._vars.woldir, self._directory, '{}.pdf'.format(self._title))
 
+    @property
+    def web_address(self):
+        return self._vars.get_arxiv_abs(self.arxiv)
+
     def __str__(self):
-        out = '{}\n'.format(self._directory)
-        out += '{}'.format(self._title)
+        out = '{:20s} {}'.format(self._directory, self._version)
+        title = self._title.replace('[{}] '.format(self.arxiv), '')
+        for line in re.findall('.{,80}\s?', title)[:-1]:
+            out += '\n' + line
         return out
 
     def find(self, search):
-        if self._arxiv.count(search) or \
-           self._title.count(search) or \
-           self._directory.count(search):
+        title = self._title.replace('[{}] '.format(self.arxiv), '')
+        pattern = re.compile(search)
+        search1 = pattern.search(self._arxiv)
+        search2 = pattern.search(title)
+        search3 = pattern.search(self._directory)
+        if (search1 or search2 or search3):
             return True
+        #if self._arxiv.count(search) or \
+           #self._title.count(search) or \
+           #self._directory.count(search):
+            #return True
         return False
 
     def set_arxiv_number(self, number):

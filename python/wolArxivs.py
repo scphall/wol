@@ -8,12 +8,17 @@ class ArXivs(object):
     _config = {}
     def __init__(self):
         self._config = {
-            'viewer' : 'open'
+            'viewer' : 'open',
+            'browser' : 'open'
         }
 
     @property
     def viewer(self):
         return self._config['viewer']
+
+    @property
+    def browser(self):
+        return self._config['browser']
 
     def __str__(self):
         out = ('-' * 80) + '\n'
@@ -79,6 +84,17 @@ class ArXivs(object):
                 out += item.__str__() + '\n'
                 out += ('-' * 80) + '\n'
                 files.append(item.file_title)
+        print out
+        return files
+
+    def find_arxivs(self, search):
+        out = ('-' * 80) + '\n'
+        files = []
+        for key, item in self._arxivs.iteritems():
+            if item.find(search):
+                out += item.__str__() + '\n'
+                out += ('-' * 80) + '\n'
+                files.append(item)
         print out
         return files
 
