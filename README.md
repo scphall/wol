@@ -14,61 +14,50 @@ Downloads directory.
 
 Usage
 -----
-Apologies, this is out of date, done a load of changes, but the basics hold
-
 
 1) Basic, you can guess these:
 
         $ wol help
         $ wol info
 
-2) Add or move with add
+2) Add an arXiv paper to directory dir, directory is optional, otherwise goes
+into default directory:
 
-        $ wol add *????.????*
+        $ wol add *????.????* dir
 
-   Can specify directory in which to add to:
+3) Delete an arXiv paper:
 
-        $ wol add *????.????* directory
+        $ wol del 1111.1111
 
-   Can also add another .wol file (extension must be .wol) from someone else.
+3) Configuration show or edit
 
-        $ wol add my_pals.wol
+        $ wol config
 
-3) Move, mv all files from current location to new directory
+4) Add another dotwol file:
+
+        $ wol addwol newdotwol
+
+5) Find papers that match regexp expression:
+
+        $ wol find thing
+        $ wol find        # displays all
+
+6) Move all files that match a find:
 
         $ wol mv *????.????* new_directory
 
-4) Update, just checks all is well
+7) Update, just checks all is well
 
         $ wol update
 
-5) Recent, lists up to 10 most recently added files
+8) Show, displays (upto a maximum) number of files that match a criteria:
 
-        $ wol recent
+        $ wol show thing
 
-6) Config, configurables given in 'wol info' change using (for example):
+9) Show arXiv page in browser, (upto a maximum) number of files that match a criteria:
 
-        $ wol config viewer okular
+        $ wol browse thing
 
-7) Find, with no arguments all info will be printed, otherwise will print
-   details on all files which match all arguments.  The findor command will
-   do an or:
-
-        $ wol find
-        $ wol find options with an and
-        $ wol findor options with an or
-
-8)  Show, will open (in background) all files matching find arguments (with
-   and).  Will not open if there are more than 5 papers which match.
-
-9) Clean, removes dead stuff and empty dirs
-
-        $ wol clean
-
-10) Remove, remove a symbolic link and puts the arxiv paper in the .delete
-   directory, this is removed with clean
-
-        $ wol rm *????.????*
 
 Installation
 ------------
@@ -81,13 +70,14 @@ Installation
    WOLDIR is the directory where files will be downloaded to.
 
         export WOLDIR=/path/to/where/to/put/files
-        alias wol="/path/to/wol/python/wol.py"
+        export PATH=$PATH:/path/to/wol
+        source /path/to/wol/python/wol_autocomplete.sh
 
 3) GO!
 
 Other
 -----
-I had problems with autocompletion, to resolve this try
+I had problems with autocompletion of files, to resolve this try
 `complete -p wol` (assuming wol is your alias). you should get:
 
         $ complete -p wol
@@ -97,9 +87,8 @@ Then do, in .bashrc:
 
         $ complete -o nospace -f default -X '.*' -F _wol wol
 
-Does not autocomplete options, this is on my todo list.
-For old arxiv files, you must add with:
 
-        $ wol add hep-ph/0123456
-
+TODO
+----
+Expand to deal with arXiv numbers of the form hep-ex/1111111
 

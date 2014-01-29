@@ -14,8 +14,10 @@ _wol()
     d*) use="del " ;;
     i*) use="info " ;;
     b*) use="browse " ;;
+    h*) use="help " ;;
   esac
   COMPREPLY=( $( compgen -W "$use" -- $cur ) )
 }
-complete -o default -F _wol  wol
-#complete -o default -o nospace -F _wol  wol
+#complete -F _wol  wol
+complete -o default -o nospace -F _wol  wol
+#complete -o default -F _wol  wol

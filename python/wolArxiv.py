@@ -41,10 +41,14 @@ class ArXiv(object):
         return self._vars.get_arxiv_abs(self.arxiv)
 
     def __str__(self):
-        out = '{:20s} {}'.format(self._directory, self._version)
+        out = '{}{}'.format(self._version.ljust(40), self._directory.rjust(40))
         title = self._title.replace('[{}] '.format(self.arxiv), '')
-        for line in re.findall('.{,80}\s?', title)[:-1]:
-            out += '\n' + line
+        line1 = False
+        for line in re.findall('.{1,78}(?:\s|$)', title):
+            out += '\n'
+            if line1: out += '  '
+            out += line
+            line1 = True
         return out
 
     def find(self, search):

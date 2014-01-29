@@ -12,7 +12,7 @@ See /wol/README.md for more details.
 
 """
 
-__title__  = "wol.py"
+__title__  = "wol"
 __author__ = "Sam Hall"
 __email__  = "samcphall@gmail.com"
 __version__ = "v2r0"
@@ -26,8 +26,6 @@ import pickle
 from wolHTMLParser import *
 from wolVars import *
 from wolArxivs import *
-#import wolOperations as wolOps
-#from wolFunctions import *
 ################################################################################
 
 
@@ -144,11 +142,13 @@ def help(operations):
         print ' {:10s} {}'.format(key, item.__doc__)
     return
 
+
 def info(arxivs, *args):
     """Print info"""
     print 'Wol info:'
     print ' {:30s} {}'.format('Number of entries', len(arxivs))
     return arxivs
+
 
 def browse(arxivs, *args):
     """Show arXiv papers in browser"""
@@ -187,6 +187,7 @@ def opts(operation, *args):
         arxivs = operations[operation](arxivs, *args)
         set_dotwol(arxivs)
     return
+
 
 ################################################################################
 
