@@ -23,6 +23,7 @@ import urllib
 import os
 import re
 import pickle
+from random import randint
 from wolHTMLParser import *
 from wolVars import *
 from wolArxivs import *
@@ -143,6 +144,33 @@ def help(operations):
     return
 
 
+def hello(arxivs, *args):
+    """Hello."""
+    quotes = [
+        ["... luckily Owl kept his head and told us that the",
+         "Opposite of an Introduction, my dear Pooh, was a",
+         "Contradiction; and, as he is very good at long words,",
+         "I am sure that that's what it is."],
+        ["... Owl, wise though he was in many ways, able to read",
+         "and write and spell his own name WOL, yet somehow",
+         "went all to pieces over delicate words like",
+         "MEASLES and BUTTEREDTOAST."],
+        ["And he respects Owl, because you can't help respecting",
+         "anybody who can spell TUESDAY, even if he doesn't spell",
+         "it right; but spelling isn't everything. There are days",
+         "when spelling Tuesday simply doesn't count."],
+        ["", "HIPY PAPY BTHUTHDTH THUTHDA", "         BTHUTHDY.",""]
+    ]
+    out = '\n'
+    out += "               {}\n"
+    out += "    , ,        {}\n"
+    out += "   (o,o)       {}\n"
+    out += "  ./)``)       {}\n"
+    out += '----"-"---<_     \n'
+    print out.format(*quotes[randint(0, len(quotes) - 1)])
+    return arxivs
+
+
 def info(arxivs, *args):
     """Print info"""
     print 'Wol info:'
@@ -175,6 +203,7 @@ def opts(operation, *args):
         'update' : update,
         'del' : delete,
         'info' : info,
+        'hello' : hello,
         'browse' : browse,
     }
     if operation in ['help', '-h']:
