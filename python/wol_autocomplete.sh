@@ -1,23 +1,32 @@
 #!/bin/bash
 
-_wol()
-{
-  cur=${COMP_WORDS[COMP_CWORD]}
-  case "${cur}" in
-    a*) use="add" ;;
-    addw*) use="addwol " ;;
-    m*) use="move " ;;
-    f*) use="find " ;;
-    s*) use="show " ;;
-    c*) use="config " ;;
-    u*) use="update " ;;
-    d*) use="del " ;;
-    i*) use="info " ;;
-    b*) use="browse " ;;
-    h*) use="help " ;;
-  esac
-  COMPREPLY=( $( compgen -W "$use" -- $cur ) )
+_wol() {
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+  COMPREPLY=( $(compgen -W \
+    "add addwol move find browse update show config del help hello info" \
+    -- "$cur") )
 }
+
+complete -F _wol wol
+
+#_wol()
+#{
+  #cur=${COMP_WORDS[COMP_CWORD]}
+  #case "${cur}" in
+    #a*) use="add" ;;
+    #addw*) use="addwol " ;;
+    #m*) use="move " ;;
+    #f*) use="find " ;;
+    #s*) use="show " ;;
+    #c*) use="config " ;;
+    #u*) use="update " ;;
+    #d*) use="del " ;;
+    #i*) use="info " ;;
+    #b*) use="browse " ;;
+    #h*) use="help hello" ;;
+  #esac
+  #COMPREPLY=( $( compgen -W "$use" -- $cur ) )
+#}
 #complete -F _wol  wol
-complete -o default -o nospace -F _wol  wol
+#complete -o default -o nospace -F _wol  wol
 #complete -o default -F _wol  wol
