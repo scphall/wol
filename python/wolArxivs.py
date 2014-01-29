@@ -31,14 +31,14 @@ class ArXivs(object):
         return len(self._arxivs)
 
     def exists(self, number):
-        pattern = re.compile('(\d{4}\.\d{4}|\d{7})')
+        pattern = re.compile('(\d{4}\.\d{4}|[\w-]+/\d{7})')
         match = pattern.search(number)
         if match is None:
             return False
         return self._arxivs.has_key(match.groups()[0])
 
     def get(self, number):
-        pattern = re.compile('(\d{4}\.\d{4}|\d{7})')
+        pattern = re.compile('(\d{4}\.\d{4}|[\w-]+/\d{7})')
         match = pattern.search(number)
         if not match:
             return False
@@ -129,7 +129,7 @@ class ArXivs(object):
     def delete(self, todel):
         if not self.exists(todel):
             return
-        pattern = re.compile('(\d{4}\.\d{4}|\d{7})')
+        pattern = re.compile('(\d{4}\.\d{4}|[\w-]+/\d{7})')
         match = pattern.search(todel)
         self._arxivs.pop(match.groups()[0]).delete()
         print 'Deleted {}'.format(todel)

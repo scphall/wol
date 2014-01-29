@@ -26,7 +26,7 @@ class ArXiv(object):
 
     @property
     def file_arxiv(self):
-        return os.path.join(self._vars.arxiv_dir, '{}.pdf'.format(self._version))
+        return os.path.join(self._vars.arxiv_dir, '{}.pdf'.format(self._version.replace('/', '_')))
 
     @property
     def arxiv(self):
@@ -42,7 +42,7 @@ class ArXiv(object):
 
     def __str__(self):
         out = '{}{}'.format(self._version.ljust(40), self._directory.rjust(40))
-        title = self._title.replace('[{}] '.format(self.arxiv), '')
+        title = self._title.replace('[{}] '.format(self.arxiv).replace('/', ''), '')
         line1 = False
         for line in re.findall('.{1,78}(?:\s|$)', title):
             out += '\n'
@@ -66,7 +66,7 @@ class ArXiv(object):
         return False
 
     def set_arxiv_number(self, number):
-        pattern = re.compile('(\d{4}\.\d{4}|\d{7})')
+        pattern = re.compile('(\d{4}\.\d{4}|[\w-]+/\d{7})')
         match = pattern.search(number)
         if not match:
             return False
@@ -96,8 +96,10 @@ class ArXiv(object):
     def set_by_copy(self, name):
         filename = os.path.split(name)[-1]
         check_dir(self._vars.arxiv_dir)
-        if not os.path.exists(os.path.join(self._vars.arxiv_dir, filename)):
-            shutil.copy(name, os.path.join(self._vars.arxiv_dir, filename))
+        if not os.path.exists(os.path.join(self._vars.arxiv_dir,
+                                           filename.replace('/', '_'))):
+            shutil.copy(name, os.path.join(self._vars.arxiv_dir,
+                                           filename.replace('/', '_')))
         return
 
     def set_by_download(self, name):
@@ -149,7 +151,7 @@ class ArXiv(object):
             check_dir(self._vars.del_dir)
             shutil.move(
                 self.file_arxiv,
-                os.path.join(self._vars.del_dir, '{}.pdf'.format(self._version))
+                os.path.join(self._vars.del_dir, '{}.pdf'.format(self._version.replace('/', '_')))
             )
         return
 
