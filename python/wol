@@ -173,8 +173,13 @@ def hello(arxivs, *args):
 
 def info(arxivs, *args):
     """Print info"""
-    print 'Wol info:'
-    print ' {:30s} {}'.format('Number of entries', len(arxivs))
+    out = 'Wol info\n'
+    out += "               Author of wol     : {}\n"
+    out += "    , ,        Number of entries : {}\n"
+    out += "   (o,o)         \n"
+    out += "  ./)``)         \n"
+    out += '----"-"---<_     \n'
+    print out.format(__author__, len(arxivs))
     return arxivs
 
 

@@ -1,6 +1,7 @@
 wol
 ===
 
+
 Wol is named for Owl in *Winnie the Pooh* (by *A. A. Milne*).
 
 
@@ -9,7 +10,7 @@ Wol is named for Owl in *Winnie the Pooh* (by *A. A. Milne*).
 >    spelling isn't everything. There are days when spelling Tuesday
 >    simply doesn't count.
 >
->->*Rabbit*, speaking of *Christopher Robin*<-
+>*Rabbit*, speaking of *Christopher Robin*
 
 It is a packge to manage arXiv papers.
 This prevents multiple copies of the same paper in `Downloads`, and gives them named that are easier to remember than 1234.3532.
@@ -101,3 +102,10 @@ Then do, in .bashrc:
 
 
 
+
+```
+    , ,        
+   (o,o)      
+  ./)``)      
+----"-"---<_     
+```
