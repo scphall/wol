@@ -1,4 +1,5 @@
 import re
+import os
 from wolArxiv import *
 ################################################################################
 
@@ -9,7 +10,8 @@ class ArXivs(object):
     def __init__(self):
         self._config = {
             'viewer' : 'open',
-            'browser' : 'open'
+            'browser' : 'open',
+            'WOLDIR' : os.getenv('WOLDIR')
         }
 
     @property

@@ -2,12 +2,17 @@
 
 _wol() {
   local cur="${COMP_WORDS[COMP_CWORD]}"
-  COMPREPLY=( $(compgen -W \
-    "add addwol move find browse update show config del help hello info" \
-    -- "$cur") )
+  case ${COMP_CWORD} in
+    1)
+      COMPREPLY=( $(compgen -W \
+        "add addwol move find browse update show config del help hello info" \
+        -- "$cur") ) ;;
+    *)
+      COMPREPLY=() ;;
+  esac
 }
 
-complete -F _wol wol
+complete -o default -f -F _wol wol
 
 #_wol()
 #{
@@ -30,3 +35,6 @@ complete -F _wol wol
 #complete -F _wol  wol
 #complete -o default -o nospace -F _wol  wol
 #complete -o default -F _wol  wol
+
+
+

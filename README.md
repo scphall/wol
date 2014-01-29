@@ -84,7 +84,7 @@ Installation
 
         $ export WOLDIR=/path/to/where/to/put/files
         $ export PATH=$PATH:/path/to/wol
-        $ source /path/to/wol/python/wol_autocomplete.sh  # for autocompletion of args
+        $ source /path/to/wol/wol-autocomplete.sh  # for autocompletion of args
 
 3) **GO!**
 
