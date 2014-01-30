@@ -88,24 +88,9 @@ Installation
 
 3) **GO!**
 
-Other
------
-I had problems with autocompletion of files, to resolve this try
-`complete -p wol` (assuming wol is your alias). you should get:
 
-        $ complete -p wol
-        $ complete -F _wol wol
+        , ,
+       (o,o)
+      ./)``)
+    ----"-"---<_
 
-Then do, in .bashrc:
-
-        $ complete -o nospace -f default -X '.*' -F _wol wol
-
-
-
-
-```
-    , ,
-   (o,o)
-  ./)``)
-----"-"---<_
-```

@@ -13,12 +13,14 @@ class WolHTMLParser(HTMLParser):
             self.get_title = True
         if tag == 'a':
             self.get_filename = True
+        return
     #
     def handle_endtag(self, tag):
         if tag == 'title':
             self.get_title = False
         if tag == 'a':
             self.get_filename = False
+        return
     #
     def handle_data(self, data):
         if self.get_title:
@@ -26,6 +28,7 @@ class WolHTMLParser(HTMLParser):
         elif self.get_filename:
             if data.startswith('arXiv:'):
                 self.filename = data.replace('arXiv:', '')
+        return
     #
 
 ################################################################################

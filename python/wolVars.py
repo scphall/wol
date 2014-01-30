@@ -9,7 +9,7 @@ def Singleton(class_):
             instances[class_] = class_(*args, **kwargs)
         return instances[class_]
     return getinstance
-
+################################################################################
 
 @Singleton
 class WolVars(object):
@@ -21,24 +21,29 @@ class WolVars(object):
         self._woldir = os.getenv('WOLDIR')
         if not self._woldir:
             self._woldir = os.getcwd()
-
+        return
+    #
     @property
     def arxiv_dir(self):
-        return os.path.join(self._woldir, 'arxiv')
+         return os.path.join(self._woldir, 'arxiv')
+    #
     @property
     def default_dir(self):
         #return os.path.join(self._woldir, 'papers')
         return 'papers'
+    #
     @property
     def dotwol(self):
         return os.path.join(self._woldir, '.wol')
+    #
     @property
     def woldir(self):
         return self._woldir
+    #
     @property
     def del_dir(self):
         return os.path.join(self._woldir, 'deleted')
-
+    #
     def get_arxiv_abs(self, number):
         return self._web_arxiv_abs.format(number)
     #

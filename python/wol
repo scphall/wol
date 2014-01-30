@@ -18,32 +18,21 @@ __email__  = "samcphall@gmail.com"
 __version__ = "v2r0"
 
 ################################################################################
+import os
+import pickle
+import re
 import sys
 import urllib
-import os
-import re
-import pickle
 from random import randint
-from wolHTMLParser import *
-from wolVars import *
 from wolArxivs import *
 ################################################################################
-
-
-def get_arxiv(number):
-    pattern = re.compile('(\d{4}\.\d{4}|\d{7})')
-    match = pattern.search(number)
-    if not match:
-        return False
-    return match.groups()[0]
-
 
 def set_dotwol(arxivs):
     with open(WolVars().dotwol, 'wb') as f:
         pickle.dump(arxivs._arxivs, f)
         pickle.dump(arxivs._config, f)
     return
-
+################################################################################
 
 def read_dotwol(filename=None):
     arxivs = ArXivs()
@@ -59,24 +48,25 @@ def read_dotwol(filename=None):
             arxivs.set_arxivs(pickle.load(f))
             arxivs.set_config(pickle.load(f))
     return arxivs
-
+################################################################################
 
 def add(arxivs, *args):
     """Add arXiv papers to wol, or move into given directory"""
     dir = None
     if len(args) == 0:
         return arxivs
-    if not get_arxiv(args[-1]) and len(args) > 1:
+    if not ArXiv().get_arxiv_number(args[-1]) and len(args) > 1:
         dir = args[-1]
         args = args[:-1]
     for arg in args:
         arxivs.add(arg)
         if dir is not None:
             arxivs.move(arg, dir)
-        print '{0}\n{1}'.format('-' * 80, arxivs.get(arg))
+        else:
+            print '{0}\n{1}'.format('-' * 80, arxivs.get(arg))
     print 80 * '-'
     return arxivs
-
+################################################################################
 
 def addwol(arxivs, *args):
     """Add existing .wol file to current .wol"""
@@ -84,7 +74,7 @@ def addwol(arxivs, *args):
         new_arxivs = read_dotwol(arg)
         arxivs.add(new_arxivs)
     return arxivs
-
+################################################################################
 
 def find(arxivs, *args):
     """Find an arXiv paper in wol"""
@@ -93,7 +83,7 @@ def find(arxivs, *args):
     for arg in args:
         arxivs.find(arg)
     return arxivs
-
+################################################################################
 
 def move(arxivs, *args):
     """Move arXiv papers in wol"""
@@ -102,7 +92,7 @@ def move(arxivs, *args):
         for arg in args[:-1]:
             arxivs.move(arg, dir)
     return arxivs
-
+################################################################################
 
 def show(arxivs, *args):
     """Show arXiv papers"""
@@ -115,7 +105,7 @@ def show(arxivs, *args):
     if len(files) > 0:
         os.system(cmd)
     return arxivs
-
+################################################################################
 
 def config(arxivs, *args):
     """Show or set config"""
@@ -123,26 +113,27 @@ def config(arxivs, *args):
         arxivs.config(args[0], args[1])
     arxivs.show_config()
     return arxivs
-
+################################################################################
 
 def update(arxivs, *args):
     """Make sure everythin in .wol is in WOLDIR"""
     arxivs.check()
     return arxivs
+################################################################################
 
 def delete(arxivs, *args):
     """Remove entry by arxiv reference"""
     for arg in args:
         arxivs.delete(arg)
     return arxivs
-
+################################################################################
 
 def help(operations):
     print 'Wol help, possible operations are:'
     for key, item in sorted(operations.iteritems()):
         print ' {:10s} {}'.format(key, item.__doc__)
     return
-
+################################################################################
 
 def hello(arxivs, *args):
     """Hello."""
@@ -169,19 +160,19 @@ def hello(arxivs, *args):
     out += '----"-"---<_     \n'
     print out.format(*quotes[randint(0, len(quotes) - 1)])
     return arxivs
-
+################################################################################
 
 def info(arxivs, *args):
     """Print info"""
     out = 'Wol info\n'
-    out += "               Author of wol     : {}\n"
-    out += "    , ,        Number of entries : {}\n"
-    out += "   (o,o)         \n"
-    out += "  ./)``)         \n"
-    out += '----"-"---<_     \n'
-    print out.format(__author__, len(arxivs))
+    out += "               Author of wol     : {}\n".format(__author__)
+    out += "    , ,        Number of entries : {}\n".format(len(arxivs))
+    out += "   (o,o)       WOLDIR            : {}\n".format(os.getenv('WOLDIR'))
+    out += "  ./)``)       \n"
+    out += '----"-"---<_   \n'
+    print out
     return arxivs
-
+################################################################################
 
 def browse(arxivs, *args):
     """Show arXiv papers in browser"""
@@ -194,7 +185,7 @@ def browse(arxivs, *args):
     if len(files) > 0:
         os.system(cmd)
     return arxivs
-
+################################################################################
 
 def opts(operation, *args):
     """Options parse and then run."""
@@ -211,20 +202,22 @@ def opts(operation, *args):
         'hello' : hello,
         'browse' : browse,
     }
-    if operation in ['help', '-h']:
+    if operation.replace('-', '') in ['help', 'h']:
         help(operations)
         return
     if operation not in operations.keys():
-        print 'Operation {} is unknown'.format(operation)
+        print 'Unknown operation : {}'.format(operation)
     else:
         arxivs = read_dotwol()
+        #try:
         arxivs = operations[operation](arxivs, *args)
+        #except:
+            #print 'Wol input error'
         set_dotwol(arxivs)
     return
-
-
 ################################################################################
 
+################################################################################
 if __name__ == "__main__":
     """Run the script!"""
     args = sys.argv[1:]
@@ -233,5 +226,4 @@ if __name__ == "__main__":
     else:
         operation = args.pop(0)
         opts(operation, *args)
-
 
