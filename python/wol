@@ -209,10 +209,10 @@ def opts(operation, *args):
         print 'Unknown operation : {}'.format(operation)
     else:
         arxivs = read_dotwol()
-        #try:
-        arxivs = operations[operation](arxivs, *args)
-        #except:
-            #print 'Wol input error'
+        try:
+            arxivs = operations[operation](arxivs, *args)
+        except:
+            print 'Wol input error'
         set_dotwol(arxivs)
     return
 ################################################################################
