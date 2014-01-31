@@ -33,6 +33,8 @@ class ArXivs(object):
         return len(self._arxivs)
     #
     def exists(self, number):
+        if self._arxivs.has_key(number):
+            return True
         number = ArXiv().get_arxiv_number(number)
         if not number:
             return False
@@ -48,6 +50,10 @@ class ArXivs(object):
         if type(new) == ArXivs:
             print 80 * '-'
             for key, item in new._arxivs.iteritems():
+                if not item.get_arxiv_number(key):
+                    print 'Paper is not from arXiv'
+                    print item, '\n', 80 * '-'
+                    continue
                 if not self.exists(key):
                     item.check()
                     self._arxivs.update({key : item})
@@ -125,12 +131,27 @@ class ArXivs(object):
         return
     #
     def delete(self, todel):
+        print "HERE"
+        print todel
+        print self.exists(todel)
         if self.exists(todel):
-            number = ArXiv().get_arxiv_number(todel)
+            number = todel
+            if not self._arxivs.has_key(todel):
+                number = ArXiv().get_arxiv_number(todel)
             arxiv2del = self._arxivs.pop(number)
             arxiv2del.delete()
             print 'Deleted {}'.format(number)
         return
+    #
+    def put(self, path, title, dir):
+        arxiv = ArXiv()
+        arxiv.put(path, title, dir)
+        self._arxivs.update({arxiv.arxiv : arxiv})
+        print 80 * '-'
+        print arxiv
+        print 80 * '-'
+        return
+
 ################################################################################
 
 

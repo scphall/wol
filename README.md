@@ -12,13 +12,14 @@ Wol is named for Owl in *Winnie the Pooh* (by *A. A. Milne*).
 >
 >*Rabbit*, speaking of *Christopher Robin*
 
-It is a packge to manage arXiv papers.
+It is a packge to manage arXiv papers (and now you can add other pdfs)
 This prevents multiple copies of the same paper in `Downloads`, and gives them named that are easier to remember than 1234.3532.
 Wol can also allows searching, opening of files and opening a paper's arXiv page in a browser at the type of a word or two.
 The user can move queried files to different directories which serves as a method of tagging.
 
 The title is automatically quieried from the internet, and if an arXiv number is given (rather than a filename), the paper will be downloaded.
 
+Only supports pdfs.
 
 Usage
 ---
@@ -65,6 +66,10 @@ into default directory:
 9) Show arXiv page in browser, (upto a maximum) number of files that match a criteria:
 
         $ wol browse thing
+
+10) Put, add any pdf, must give 3 arguments:
+
+        $ wol put /path/to/file.pdf "Title of the file" dir
 
 ArXiv files are usually of the form `1234.5678`, but they can also be of the
 form `name/1234567`.

@@ -187,6 +187,16 @@ def browse(arxivs, *args):
     return arxivs
 ################################################################################
 
+def put(arxivs, *args):
+    if (len(args) != 3):
+        print 'To put a paper in wol, 3 args are required:'
+        print ' 1) pdf file'
+        print ' 2) title'
+        print ' 3) directory'
+    else:
+        arxivs.put(*args)
+    return arxivs
+
 def opts(operation, *args):
     """Options parse and then run."""
     operations = {
@@ -201,6 +211,7 @@ def opts(operation, *args):
         'info' : info,
         'hello' : hello,
         'browse' : browse,
+        'put' : put,
     }
     if operation.replace('-', '') in ['help', 'h']:
         help(operations)
@@ -209,10 +220,10 @@ def opts(operation, *args):
         print 'Unknown operation : {}'.format(operation)
     else:
         arxivs = read_dotwol()
-        try:
-            arxivs = operations[operation](arxivs, *args)
-        except:
-            print 'Wol input error'
+        #try:
+        arxivs = operations[operation](arxivs, *args)
+        #except:
+            #print 'Wol input error'
         set_dotwol(arxivs)
     return
 ################################################################################

@@ -107,10 +107,12 @@ class ArXiv(object):
     #
     def set_by_download(self, name):
         cmd = 'wget -q -U firefox {} -O {}'
+        if not self.get_arxiv_number(name):
+            return False
         cmd = cmd.format(self._vars.get_arxiv_pdf(name), self.file_arxiv)
         check_dir(self._vars.arxiv_dir)
         os.system(cmd)
-        return
+        return True
     #
     def create_link(self):
         cmd = 'ln -s "{}" "{}"'
@@ -142,10 +144,14 @@ class ArXiv(object):
         return
     #
     def check(self):
+        if not self.get_arxiv_number(self.arxiv):
+            print 'Paper not from arXiv'
+            return
         if not os.path.exists(self.file_arxiv):
             self.set_by_download(self._arxiv)
         if not os.path.exists(self.file_title):
             self.create_link()
+        return
     #
     def delete(self):
         if os.path.exists(self.file_title):
@@ -157,5 +163,15 @@ class ArXiv(object):
                 os.path.join(self._vars.del_dir, '{}.pdf'.format(self._version.replace('/', '_')))
             )
         return
+    #
+    def put(self, path, title, dir):
+        shutil.copy(path, self._vars.arxiv_dir)
+        self._arxiv = os.path.split(path)[-1].rstrip('.pdf')
+        self._version = os.path.split(path)[-1].rstrip('.pdf')
+        self._title = title
+        self._directory = dir
+        self.create_link()
+        return
+
 ################################################################################
 

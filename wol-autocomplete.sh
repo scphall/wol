@@ -5,7 +5,7 @@ _wol() {
   case ${COMP_CWORD} in
     1)
       COMPREPLY=( $(compgen -W \
-        "add addwol move find browse update show config del help hello info" \
+        "add addwol move find browse update show config del help hello info put" \
         -- "$cur") ) ;;
     *)
       COMPREPLY=() ;;
