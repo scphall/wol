@@ -131,7 +131,7 @@ class ArXivs(object):
         return
     #
     def delete(self, todel):
-        print "HERE"
+        #print "HERE"
         print todel
         print self.exists(todel)
         if self.exists(todel):

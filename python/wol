@@ -98,8 +98,8 @@ def show(arxivs, *args):
     """Show arXiv papers"""
     files = arxivs.find(args[0])
     cmd = '{} '.format(arxivs.viewer)
-    if len(files) > 6:
-        files = files[:6]
+    #if len(files) > 6:
+        #files = files[:6]
     for file in files:
         cmd += '"{}" '.format(file)
     if len(files) > 0:
