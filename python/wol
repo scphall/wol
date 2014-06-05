@@ -51,9 +51,10 @@ def read_dotwol(filename=None):
 ################################################################################
 
 def add(arxivs, *args):
-    """Add arXiv papers to wol, or move into given directory"""
+    """Add arXiv paper to wol           : wol add arXiv-paper(s) [optional tag]"""
     dir = None
     if len(args) == 0:
+        print "wol add requires argument(s)"
         return arxivs
     if not ArXiv().get_arxiv_number(args[-1]) and len(args) > 1:
         dir = args[-1]
@@ -69,7 +70,7 @@ def add(arxivs, *args):
 ################################################################################
 
 def addwol(arxivs, *args):
-    """Add existing .wol file to current .wol"""
+    """Add another .wol file to wol     : wol addwol another-dot-wol-file"""
     for arg in args:
         new_arxivs = read_dotwol(arg)
         arxivs.add(new_arxivs)
@@ -77,7 +78,7 @@ def addwol(arxivs, *args):
 ################################################################################
 
 def find(arxivs, *args):
-    """Find an arXiv paper in wol"""
+    """Add a paper in wol               : wol find [optional search]"""
     if len(args) == 0:
         arxivs.find('.')
     for arg in args:
@@ -86,7 +87,7 @@ def find(arxivs, *args):
 ################################################################################
 
 def move(arxivs, *args):
-    """Move arXiv papers in wol"""
+    """Move all matching papers to tag  : wol move search tag"""
     if len(args) > 1:
         dir = args[len(args) - 1]
         for arg in args[:-1]:
@@ -95,7 +96,7 @@ def move(arxivs, *args):
 ################################################################################
 
 def show(arxivs, *args):
-    """Show arXiv papers"""
+    """Show matching papers             : wol show search"""
     files = arxivs.find(args[0])
     cmd = '{} '.format(arxivs.viewer)
     #if len(files) > 6:
@@ -108,7 +109,8 @@ def show(arxivs, *args):
 ################################################################################
 
 def config(arxivs, *args):
-    """Show or set config"""
+    """Show or set config               : wol config
+                                             : wol config option new-setting"""
     if len(args) == 2:
         arxivs.config(args[0], args[1])
     arxivs.show_config()
@@ -116,27 +118,35 @@ def config(arxivs, *args):
 ################################################################################
 
 def update(arxivs, *args):
-    """Make sure everythin in .wol is in WOLDIR"""
+    """Ensure wol is up to date         : wol update"""
     arxivs.check()
     return arxivs
 ################################################################################
 
 def delete(arxivs, *args):
-    """Remove entry by arxiv reference"""
+    """Remove paper explicitly (1-by-1) : wol delete filename"""
     for arg in args:
         arxivs.delete(arg)
     return arxivs
 ################################################################################
 
 def help(operations):
-    print 'Wol help, possible operations are:'
+    out = '\n'
+    out += "    , ,   Wol is here to help.\n"
+    out += "   (o,o)    \n"
+    out += "  ./)``)    \n"
+    out += '----"-"---<_\n'
+    out += 'Possible operations are:\n'
+    out += 'Operation   Description                        Usage'
+    print out
     for key, item in sorted(operations.iteritems()):
         print ' {:10s} {}'.format(key, item.__doc__)
+    print "    For display problems check your config!"
     return
 ################################################################################
 
 def hello(arxivs, *args):
-    """Hello."""
+    """Hello.                           : wol hello"""
     quotes = [
         ["... luckily Owl kept his head and told us that the",
          "Opposite of an Introduction, my dear Pooh, was a",
@@ -163,7 +173,7 @@ def hello(arxivs, *args):
 ################################################################################
 
 def info(arxivs, *args):
-    """Print info"""
+    """Wol related information          : wol info"""
     out = 'Wol info\n'
     out += "               Author of wol     : {}\n".format(__author__)
     out += "    , ,        Number of entries : {}\n".format(len(arxivs))
@@ -175,7 +185,7 @@ def info(arxivs, *args):
 ################################################################################
 
 def browse(arxivs, *args):
-    """Show arXiv papers in browser"""
+    """Show arXiv papers in browser     : wol search"""
     files = arxivs.find_arxivs(args[0])
     cmd = '{} '.format(arxivs.browser)
     if len(files) > 6:
@@ -188,13 +198,15 @@ def browse(arxivs, *args):
 ################################################################################
 
 def put(arxivs, *args):
-    if (len(args) != 3):
-        print 'To put a paper in wol, 3 args are required:'
-        print ' 1) pdf file'
-        print ' 2) title'
-        print ' 3) directory'
-    else:
-        arxivs.put(*args)
+    """Put non arXiv document into wol  : wol path/to/file title tag"""
+    #if (len(args) != 3):
+        #print 'To put a paper in wol, 3 args are required:'
+        #print ' 1) pdf file'
+        #print ' 2) title'
+        #print ' 3) directory'
+    #else:
+        #arxivs.put(*args)
+    arxivs.put(*args)
     return arxivs
 
 def opts(operation, *args):
@@ -217,14 +229,20 @@ def opts(operation, *args):
         help(operations)
         return
     if operation not in operations.keys():
-        print 'Unknown operation : {}'.format(operation)
+        print 'Unknown operation : {}, try wol help'.format(operation)
     else:
-        arxivs = read_dotwol()
-        #try:
-        arxivs = operations[operation](arxivs, *args)
-        #except:
-            #print 'Wol input error'
-        set_dotwol(arxivs)
+        try:
+            arxivs = read_dotwol()
+            #try:
+            arxivs = operations[operation](arxivs, *args)
+            #except:
+                #print 'Wol input error'
+            set_dotwol(arxivs)
+        except:
+            out =  ' , ,    Wol Error in \'wol {}\'          : Usage\n'.format(operation)
+            out += '(o,o)   '
+            out += operations[operation].__doc__
+            print out
     return
 ################################################################################
 
