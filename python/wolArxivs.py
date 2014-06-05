@@ -132,8 +132,8 @@ class ArXivs(object):
     #
     def delete(self, todel):
         #print "HERE"
-        print todel
-        print self.exists(todel)
+        #print todel
+        #print self.exists(todel)
         if self.exists(todel):
             number = todel
             if not self._arxivs.has_key(todel):
@@ -141,6 +141,8 @@ class ArXivs(object):
             arxiv2del = self._arxivs.pop(number)
             arxiv2del.delete()
             print 'Deleted {}'.format(number)
+        else:
+            print 'Paper {0} unavailable for deletion, please use filename'.format(todel)
         return
     #
     def put(self, path, title, dir):

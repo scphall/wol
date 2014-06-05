@@ -135,13 +135,13 @@ def help(operations):
     out += "    , ,   Wol is here to help.\n"
     out += "   (o,o)    \n"
     out += "  ./)``)    \n"
-    out += '----"-"---<_\n'
-    out += 'Possible operations are:\n'
+    out += '----"-"---<_\n\n'
+    #out += 'Possible operations are:\n'
     out += 'Operation   Description                        Usage'
     print out
     for key, item in sorted(operations.iteritems()):
         print ' {:10s} {}'.format(key, item.__doc__)
-    print "    For display problems check your config!"
+    print "    For display problems check your config!\n"
     return
 ################################################################################
 
