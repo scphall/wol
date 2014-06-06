@@ -78,11 +78,10 @@ def addwol(arxivs, *args):
 ################################################################################
 
 def find(arxivs, *args):
-    """Add a paper in wol               : wol find [optional search]"""
+    """Add a paper to wol               : wol find [optional searches AND]"""
     if len(args) == 0:
         arxivs.find('.')
-    for arg in args:
-        arxivs.find(arg)
+    arxivs.find(*args)
     return arxivs
 ################################################################################
 
@@ -96,11 +95,15 @@ def move(arxivs, *args):
 ################################################################################
 
 def show(arxivs, *args):
-    """Show matching papers             : wol show search"""
-    files = arxivs.find(args[0])
+    """Show matching papers             : wol show search [AND search2,3,...]"""
+    files = arxivs.find(*args)
     cmd = '{} '.format(arxivs.viewer)
-    #if len(files) > 6:
-        #files = files[:6]
+    if len(files) > arxivs.show_max:
+        out =  ' , ,    Requested to open {} files\n'.format(len(files))
+        out += '(o,o)   Only allowed to open {}.  '.format(arxivs.show_max)
+        out += 'Change in config or restrict search'
+        print out
+        return arxivs
     for file in files:
         cmd += '"{}" '.format(file)
     if len(files) > 0:
@@ -109,8 +112,7 @@ def show(arxivs, *args):
 ################################################################################
 
 def config(arxivs, *args):
-    """Show or set config               : wol config
-                                             : wol config option new-setting"""
+    """Show or set config               : wol config [option new-setting]"""
     if len(args) == 2:
         arxivs.config(args[0], args[1])
     arxivs.show_config()
@@ -136,7 +138,6 @@ def help(operations):
     out += "   (o,o)    \n"
     out += "  ./)``)    \n"
     out += '----"-"---<_\n\n'
-    #out += 'Possible operations are:\n'
     out += 'Operation   Description                        Usage'
     print out
     for key, item in sorted(operations.iteritems()):
@@ -185,7 +186,7 @@ def info(arxivs, *args):
 ################################################################################
 
 def browse(arxivs, *args):
-    """Show arXiv papers in browser     : wol search"""
+    """Show arXiv papers in browser     : wol browse search"""
     files = arxivs.find_arxivs(args[0])
     cmd = '{} '.format(arxivs.browser)
     if len(files) > 6:
@@ -229,14 +230,13 @@ def opts(operation, *args):
         help(operations)
         return
     if operation not in operations.keys():
-        print 'Unknown operation : {}, try wol help'.format(operation)
+        out =  ' , ,    Wol Error\n'
+        out += '(o,o)   Unknown operation {}, try wol help'.format(operation)
+        print out
     else:
         try:
             arxivs = read_dotwol()
-            #try:
             arxivs = operations[operation](arxivs, *args)
-            #except:
-                #print 'Wol input error'
             set_dotwol(arxivs)
         except:
             out =  ' , ,    Wol Error in \'wol {}\'          : Usage\n'.format(operation)

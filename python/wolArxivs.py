@@ -10,7 +10,8 @@ class ArXivs(object):
     def __init__(self):
         self._config = {
             'viewer' : 'open',
-            'browser' : 'open'
+            'browser' : 'open',
+            'show_max' : '10',
         }
         return
     #
@@ -21,6 +22,10 @@ class ArXivs(object):
     @property
     def browser(self):
         return self._config['browser']
+    #
+    @property
+    def show_max(self):
+        return int(self._config['show_max'])
     #
     def __str__(self):
         out = ('-' * 80) + '\n'
@@ -77,17 +82,26 @@ class ArXivs(object):
         return
     #
     def set_config(self, conf):
-        self._config = conf
+        self._config.update(conf)
         return
     #
-    def find(self, search):
+    def find(self, *searches):
         out = ('-' * 80) + '\n'
         files = []
         for key, item in self._arxivs.iteritems():
-            if item.find(search):
+            found = True
+            for search in searches:
+                if not item.find(search):
+                    found = False
+            if found:
                 out += item.__str__() + '\n'
                 out += ('-' * 80) + '\n'
                 files.append(item.file_title)
+
+            #if item.find(search):
+                #out += item.__str__() + '\n'
+                #out += ('-' * 80) + '\n'
+                #files.append(item.file_title)
         print out
         return files
     #
