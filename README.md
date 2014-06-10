@@ -79,13 +79,14 @@ for these.
 
 Installation
 ------------
-0) Get the package from github:
+1. Get the package from github:
 
         $ git clone https://github.com/hippyPig/wol
 
-1) Simply put /wol in your chosen path.
-2) In ~/.bashrc specify WOLDIR with export, and an alias.
-   WOLDIR is the directory where files will be downloaded to.
+2. Simply put /wol in your chosen path.
+3. Run ./install.sh from directory
+	1. This simply sets the default WOLDIR to ~/Documents/Wol
+	2. This is put in your .bashrc:
 
         $ export WOLDIR=/path/to/where/to/put/files
         $ export PATH=$PATH:/path/to/wol
