@@ -161,7 +161,11 @@ def hello(arxivs, *args):
          "anybody who can spell TUESDAY, even if he doesn't spell",
          "it right; but spelling isn't everything. There are days",
          "when spelling Tuesday simply doesn't count."],
-        ["", "HIPY PAPY BTHUTHDTH THUTHDA", "         BTHUTHDY.",""]
+        ["", "HIPY PAPY BTHUTHDTH THUTHDA", "         BTHUTHDY.",""],
+        ["Pooh had wandered into the Hundred Acre Wood, and was standing",
+         "in front of what had once been Owl's house. It didn't look at all",
+         "like a house now, it looked like a tree that had been blown down;",
+         "and as soon as a house looks like that, it is time you tried to find another one."],
     ]
     out = '\n'
     out += "               {}\n"
