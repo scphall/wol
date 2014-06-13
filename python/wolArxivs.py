@@ -58,8 +58,8 @@ class ArXivs(object):
                 if not item.get_arxiv_number(key):
                     print 'Paper is not from arXiv'
                     print item, '\n', 80 * '-'
-                    continue
-                if not self.exists(key):
+                    #continue
+                elif not self.exists(key):
                     item.check()
                     self._arxivs.update({key : item})
                     print item, '\n', 80 * '-'
@@ -73,9 +73,11 @@ class ArXivs(object):
                     print 'Adding {} failed'.format(arxiv.arxiv)
         return
     #
-    def move(self, arxiv, dir):
-        self._arxivs.get(arxiv).move(dir)
-        return
+    #def move(self, arxiv, dir):
+        #print('here2')
+        #self._arxivs.get(arxiv).move(dir)
+        #print('here2')
+        #return
     #
     def set_arxivs(self, arxivs):
         self._arxivs = arxivs
@@ -85,7 +87,10 @@ class ArXivs(object):
         self._config.update(conf)
         return
     #
-    def find(self, *searches):
+    def find(self, *searches, **kwargs):
+        printer = True
+        if kwargs.has_key('printer'):
+            printer = kwargs['printer']
         out = ('-' * 80) + '\n'
         files = []
         for key, item in self._arxivs.iteritems():
@@ -102,7 +107,8 @@ class ArXivs(object):
                 #out += item.__str__() + '\n'
                 #out += ('-' * 80) + '\n'
                 #files.append(item.file_title)
-        print out
+        if printer:
+            print out
         return files
     #
     def find_arxivs(self, search):
@@ -130,14 +136,19 @@ class ArXivs(object):
         print out
         return
     #
-    def move(self, search, newdir):
-        out = ('-' * 80) + '\n'
+    def move(self, search, newdir, printer=False):
+        arxiv_number = ArXiv().get_arxiv_number(search)
         for key, item in self._arxivs.iteritems():
+            found = False
             if item.find(search):
                 item.move(newdir)
-                out += item.__str__() + '\n'
-                out += ('-' * 80) + '\n'
-        print out
+                found = True
+            elif arxiv_number and item.find(arxiv_number):
+                item.move(newdir)
+                found = True
+            if found and printer:
+                print '{0}\n{1}'.format('-' * 80, item.__str__())
+        return
     #
     def check(self):
         for key, item in self._arxivs.iteritems():
@@ -145,19 +156,17 @@ class ArXivs(object):
         return
     #
     def delete(self, todel):
-        #print "HERE"
-        #print todel
-        #print self.exists(todel)
         if self.exists(todel):
             number = todel
             if not self._arxivs.has_key(todel):
                 number = ArXiv().get_arxiv_number(todel)
             arxiv2del = self._arxivs.pop(number)
             arxiv2del.delete()
-            print 'Deleted {}'.format(number)
-        else:
-            print 'Paper {0} unavailable for deletion, please use filename'.format(todel)
-        return
+            print ' Deleted '.center(80, '-')
+            print arxiv2del
+            print '-' * 80
+            return True
+        return False
     #
     def put(self, path, title, dir):
         arxiv = ArXiv()

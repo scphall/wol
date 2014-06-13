@@ -60,11 +60,11 @@ def add(arxivs, *args):
         dir = args[-1]
         args = args[:-1]
     for arg in args:
+        print arg, dir
         arxivs.add(arg)
         if dir is not None:
             arxivs.move(arg, dir)
-        else:
-            print '{0}\n{1}'.format('-' * 80, arxivs.get(arg))
+        print '{0}\n{1}'.format('-' * 80, arxivs.get(arg))
     print 80 * '-'
     return arxivs
 ################################################################################
@@ -81,7 +81,8 @@ def find(arxivs, *args):
     """Add a paper to wol               : wol find [optional searches AND]"""
     if len(args) == 0:
         arxivs.find('.')
-    arxivs.find(*args)
+    else:
+        arxivs.find(*args)
     return arxivs
 ################################################################################
 
@@ -90,7 +91,8 @@ def move(arxivs, *args):
     if len(args) > 1:
         dir = args[len(args) - 1]
         for arg in args[:-1]:
-            arxivs.move(arg, dir)
+            arxivs.move(arg, dir, printer=True)
+    print 80 * '-'
     return arxivs
 ################################################################################
 
@@ -128,7 +130,10 @@ def update(arxivs, *args):
 def delete(arxivs, *args):
     """Remove paper explicitly (1-by-1) : wol delete filename"""
     for arg in args:
-        arxivs.delete(arg)
+        if not arxivs.delete(arg):
+            if len(arxivs.find(arg, printer=False)):
+                print ' , ,   Cannot delete {}'.format(arg)
+                print '(o,o)  This filename, explicitly, is not in wol'
     return arxivs
 ################################################################################
 
@@ -238,15 +243,15 @@ def opts(operation, *args):
         out += '(o,o)   Unknown operation {}, try wol help'.format(operation)
         print out
     else:
-        try:
-            arxivs = read_dotwol()
-            arxivs = operations[operation](arxivs, *args)
-            set_dotwol(arxivs)
-        except:
-            out =  ' , ,    Wol Error in \'wol {}\'          : Usage\n'.format(operation)
-            out += '(o,o)   '
-            out += operations[operation].__doc__
-            print out
+        #try:
+        arxivs = read_dotwol()
+        arxivs = operations[operation](arxivs, *args)
+        set_dotwol(arxivs)
+        #except:
+            #out =  ' , ,    Wol Error in \'wol {}\'          : Usage\n'.format(operation)
+            #out += '(o,o)   '
+            #out += operations[operation].__doc__
+            #print out
     return
 ################################################################################
 
