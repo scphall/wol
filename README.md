@@ -88,9 +88,10 @@ Installation
 	1. This simply sets the default WOLDIR to ~/Documents/Wol
 	2. This is put in your .bashrc:
 
-        $ export WOLDIR=/path/to/where/to/put/files
-        $ export PATH=$PATH:/path/to/wol
-        $ source /path/to/wol/wol-autocomplete.sh  # for autocompletion of args
+        	$ export WOLDIR=/path/to/where/to/put/files
+        	$ export PATH=$PATH:/path/to/wol
+        	$ source /path/to/wol/wol-autocomplete.sh  # for autocompletion of args
+	
 
 3) **GO!**
 
