@@ -60,7 +60,6 @@ def add(arxivs, *args):
         dir = args[-1]
         args = args[:-1]
     for arg in args:
-        print arg, dir
         arxivs.add(arg)
         if dir is not None:
             arxivs.move(arg, dir)
