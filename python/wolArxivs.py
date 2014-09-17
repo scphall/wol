@@ -9,8 +9,8 @@ class ArXivs(object):
     _config = {}
     def __init__(self):
         self._config = {
-            'viewer' : 'open',
-            'browser' : 'open',
+            'viewer' : 'open {}',
+            'browser' : 'open {}',
             'show_max' : '10',
         }
         return

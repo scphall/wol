@@ -98,15 +98,19 @@ def move(arxivs, *args):
 def show(arxivs, *args):
     """Show matching papers             : wol show search [AND search2,3,...]"""
     files = arxivs.find(*args)
-    cmd = '{} '.format(arxivs.viewer)
     if len(files) > arxivs.show_max:
         out =  ' , ,    Requested to open {} files\n'.format(len(files))
         out += '(o,o)   Only allowed to open {}.  '.format(arxivs.show_max)
         out += 'Change in config or restrict search'
         print out
         return arxivs
+    filelist = ''
     for file in files:
-        cmd += '"{}" '.format(file)
+        filelist += '"{}" '.format(file)
+    cmd = arxivs.viewer
+    if not cmd.count('{}'):
+        cmd += ' {} '
+    cmd = cmd.format(filelist)
     if len(files) > 0:
         os.system(cmd)
     return arxivs
@@ -195,12 +199,29 @@ def info(arxivs, *args):
 
 def browse(arxivs, *args):
     """Show arXiv papers in browser     : wol browse search"""
-    files = arxivs.find_arxivs(args[0])
-    cmd = '{} '.format(arxivs.browser)
-    if len(files) > 6:
-        files = files[:6]
+    files = arxivs.find(*args)
+    #files = arxivs.find_arxivs(args[0])
+    #cmd = '{} '.format(arxivs.browser)
+    #if len(files) > 6:
+        #files = files[:6]
+    #for file in files:
+        #cmd += '"{}" '.format(file.web_address)
+    #if len(files) > 0:
+        #os.system(cmd)
+    #return arxivs
+    if len(files) > arxivs.show_max:
+        out =  ' , ,    Requested to open {} files\n'.format(len(files))
+        out += '(o,o)   Only allowed to open {}.  '.format(arxivs.show_max)
+        out += 'Change in config or restrict search'
+        print out
+        return arxivs
+    filelist = ''
     for file in files:
-        cmd += '"{}" '.format(file.web_address)
+        filelist += '"{}" '.format(file)
+    cmd = arxivs.browser
+    if not cmd.count('{}'):
+        cmd += ' {} '
+    cmd = cmd.format(filelist)
     if len(files) > 0:
         os.system(cmd)
     return arxivs
