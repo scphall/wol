@@ -14,7 +14,7 @@ See /wol/README.md for more details.
 
 __title__  = "wol"
 __author__ = "Sam Hall"
-__email__  = "samcphall@gmail.com"
+__email__  = "scphall@gmail.com"
 __version__ = "v2r0"
 
 ################################################################################
@@ -208,14 +208,13 @@ def browse(arxivs, *args):
 
 def put(arxivs, *args):
     """Put non arXiv document into wol  : wol path/to/file title tag"""
-    #if (len(args) != 3):
-        #print 'To put a paper in wol, 3 args are required:'
-        #print ' 1) pdf file'
-        #print ' 2) title'
-        #print ' 3) directory'
-    #else:
-        #arxivs.put(*args)
-    arxivs.put(*args)
+    out  = "Wol put usage: 1) filename\n"
+    out += "    , ,        2) Title\n"
+    out += "   (o,o)       3) tag"
+    if (len(args) != 3):
+        print out
+    else:
+        arxivs.put(*args)
     return arxivs
 
 def opts(operation, *args):
@@ -242,24 +241,26 @@ def opts(operation, *args):
         out += '(o,o)   Unknown operation {}, try wol help'.format(operation)
         print out
     else:
-        #try:
-        arxivs = read_dotwol()
-        arxivs = operations[operation](arxivs, *args)
-        set_dotwol(arxivs)
-        #except:
-            #out =  ' , ,    Wol Error in \'wol {}\'          : Usage\n'.format(operation)
-            #out += '(o,o)   '
-            #out += operations[operation].__doc__
-            #print out
+        try:
+            arxivs = read_dotwol()
+            arxivs = operations[operation](arxivs, *args)
+            set_dotwol(arxivs)
+        except:
+            out =  ' , ,    Wol Error in \'wol {}\'          : Usage\n'.format(operation)
+            out += '(o,o)   '
+            out += operations[operation].__doc__
+            print out
     return
 ################################################################################
 
 ################################################################################
 if __name__ == "__main__":
     """Run the script!"""
+    out =  ' , ,    Plesse give an operation\n'
+    out += '(o,o)   - OR ask for help'
     args = sys.argv[1:]
     if not args:
-        print 'Please give an operation'
+        print out
     else:
         operation = args.pop(0)
         opts(operation, *args)
