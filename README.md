@@ -91,13 +91,19 @@ Installation
         	$ export WOLDIR=/path/to/where/to/put/files
         	$ export PATH=$PATH:/path/to/wol
         	$ source /path/to/wol/wol-autocomplete.sh  # for autocompletion of args
-	
+
 
 3) **GO!**
 
+
+License
+-------
+Distributed under The MIT License, Copyright (c) 2014 Samuel C. P. Hall
 
         , ,
        (o,o)
       ./)``)
     ----"-"---<_
+
+
 
