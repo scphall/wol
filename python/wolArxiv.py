@@ -8,7 +8,7 @@ from wolHTMLParser import *
 
 def check_dir(dir):
     if not os.path.exists(dir):
-        os.mkdir(dir)
+        os.makedirs(dir)
     return
 ################################################################################
 
