@@ -42,7 +42,7 @@ class ArXiv(object):
     #
     @staticmethod
     def get_arxiv_number(number):
-        pattern = re.compile('(\d{4}\.\d{4}|[\w-]+/\d{7})')
+        pattern = re.compile('(\d{4}\.\d{4,5}|[\w-]+/\d{7})')
         match = pattern.search(number)
         if not match:
             return False
